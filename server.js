@@ -2,14 +2,34 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const nodemailer = require("nodemailer");
+const morgan = require("morgan");
 
 dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 5000;
 
-app.use(cors());
 app.use(express.json());
+app.use(morgan());
+
+const whitelist = ["https://cloudwithnikhil.vercel.app/"];
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    console.log("Received origin:", origin);
+
+    if (!origin || whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      console.log("Origin Not Allowed", new Date(), origin);
+      callback(new Error("CORS error: Origin not allowed"));
+    }
+  },
+  methods: ["GET", "POST", "PUT"],
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 app.get("/", (_req, res) => {
   res.json({
