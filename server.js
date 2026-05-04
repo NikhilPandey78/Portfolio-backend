@@ -12,7 +12,7 @@ const port = process.env.PORT || 5000;
 app.use(express.json());
 app.use(morgan());
 
-const whitelist = ["https://cloudwithnikhil.vercel.app"];
+const whitelist = ["https://cloudwithnikhil.vercel.app" , "http://localhost:3000"];
 
 const corsOptions = {
   origin: (origin, callback) => {
